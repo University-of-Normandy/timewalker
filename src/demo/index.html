@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../js/lib/requirejs/require.js"
+            data-main="../js/dependencies.js"></script>
+    <link rel="stylesheet" href="../styles/timewalker.css" />
+</head>
+<body>
+<style>
+    /* ////////////////////////////////////////////////////////////////////// */
+    /*                                                                        */
+    /* DEMO                                                                   */
+    /*                                                                        */
+    /* ////////////////////////////////////////////////////////////////////// */
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    html, body {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+    }
+
+    .data-blue {
+        background: rgba(25,25,200, .5);
+        border: solid thin rgba(25,25,200, .75);
+    }
+    .data-pink {
+        background: deeppink;
+        border: solid thin deeppink;
+    }
+</style>
+<a href="#" class="">Vue complète</a>
+<script>
+    var example, TimeViewer;
+
+    require(['TimeViewer'], function (tv) {
+        TimeViewer = tv;
+        var serie = new TimeViewer.Model.Serie({
+            label: "Stéphane Bouvry"
+        });
+        serie.add([
+            {
+                label: "Développeur",
+                start: '2009-01-01',
+                end: '2009-12-31'
+            },
+            {
+                label: "Analyste",
+                start: '2010-01-01',
+                end: '2010-12-31'
+            },
+            {
+                label: "Développeur",
+                start: '2011-01-01',
+                end: '2011-12-31'
+            },
+             {
+             label: "Développeur",
+             start: '2012-01-01',
+             end: '2012-12-31'
+             },
+             {
+             label: "Conseiller",
+             start: '2012-01-01',
+             end: '2013-12-31'
+             },
+             {
+             label: "Développeur",
+             start: '2014-01-01',
+             end: '2014-12-31'
+             },
+             {
+             label: "Consultant",
+             start: '2015-01-01',
+             end: '2015-12-31'
+             }
+        ]);
+
+        var serie2 = new TimeViewer.Model.Serie({
+            label: 'Arnaud Daret'
+        });
+        serie2.add([
+            {
+                label: "Consultant",
+                start: '2010-01-01',
+                end: '2011-06-15'
+            },
+            {
+                label: "Consultant",
+                start: '2011-06-20',
+                end: '2012-12-31'
+            }
+        ]);
+
+        var serie3 = new TimeViewer.Model.Serie({
+            label: 'Conseiller technique'
+        });
+        serie3.add([
+            {
+                label: "Conseiller technique",
+                start: '2013-01-01',
+                end: ''
+            }
+        ]);
+
+        var serie4 = new TimeViewer.Model.Serie({
+            label: 'Conseiller administratif et RH'
+        });
+        serie4.add([
+            {
+                label: "Conseiller administratif et RH",
+                start: '2009-01-01',
+                end: '2009-12-31'
+            },
+            {
+                label: "Conseiller administratif et RH",
+                start: '2010-01-01',
+                end: '2010-05-28'
+            },
+            {
+                label: "Conseiller administratif et RH",
+                start: '2011-01-01',
+                end: '2011-05-28'
+            },{
+                label: "Conseiller administratif et RH",
+                start: '2012-01-01',
+                end: '2012-05-28'
+            },{
+                label: "Conseiller administratif et RH",
+                start: '2013-01-01',
+                end: '2013-05-28'
+            },{
+                label: "Conseiller administratif et RH",
+                start: '2014-01-01',
+                end: '2014-05-28'
+            },{
+                label: "Conseiller administratif et RH",
+                start: '2015-01-01',
+                end: '2015-05-28'
+            }
+
+        ]);
+
+        var all = new TimeViewer.Model.TimeViewer([serie, serie2, serie3, serie4]);
+        console.log(all.toJSON());
+        console.log('la totale débute ', all.getMinDate());
+        console.log('la totale finie ', all.getMaxDate());
+
+
+        example = new TimeViewer.View.Main({model: all}, {
+            title: "Membres de l'équipe",
+            labelClass : {
+                'Développeur': 'data-blue',
+                'Conseiller': 'data-pink'
+            }
+        });
+
+        $('body').append(example.render().$el);
+        /*****/
+    });
+</script>
+</body>
+</html>
