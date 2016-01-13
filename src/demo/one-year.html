@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../js/lib/requirejs/require.js"
+            data-main="../js/dependencies.js"></script>
+    <link rel="stylesheet" href="../styles/timewalker.css" />
+</head>
+<body>
+<style>
+    /* ////////////////////////////////////////////////////////////////////// */
+    /*                                                                        */
+    /* DEMO                                                                   */
+    /*                                                                        */
+    /* ////////////////////////////////////////////////////////////////////// */
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    html, body {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+    }
+
+    .data-pink {
+        background: rgba(204,0,102, .75);
+        border: solid thin rgba(204,0,102, .9);
+    }
+</style>
+<script>
+    var example, TimeViewer;
+
+    require(['TimeViewer'], function (tv) {
+        TimeViewer = tv;
+
+        var serie = new TimeViewer.Model.Serie({
+            label: "Stéphane Bouvry"
+        });
+        serie.add([
+            {label: "Développeur",  start: '2016-01-01',    end: '2016-12-31'},
+            {label: "Concepteur",   start: '2016-03-01',    end: '2016-09-31'}
+        ]);
+        var all = new TimeViewer.Model.TimeViewer([serie]);
+
+        example = new TimeViewer.View.Main({model: all}, {
+            title: "Membres de l'équipe",
+            labelClass : {
+                'Développeur': 'data-blue',
+                'Concepteur': 'data-pink'
+            }
+        });
+
+        var serie2 = new TimeViewer.Model.Serie({
+            label: "Serie N°2"
+        });
+        serie2.add([
+            {label: "Label A",  start: '2016-01-01',    end: '2016-12-31'},
+            {label: "Label B",  start: '2015-01-01',    end: '2015-12-31'},
+            {label: "Label C",   start: '2015-06-01',    end: '2016-06-31'}
+        ]);
+        var all2 = new TimeViewer.Model.TimeViewer([serie2]);
+
+        example2 = new TimeViewer.View.Main({model: all2}, {
+            title: "Membres de l'équipe",
+            labelClass : {
+                'Développeur': 'data-blue',
+                'Concepteur': 'data-pink'
+            },
+            forceBegining: '2014-01-01'
+        });
+
+        $('body').append(example.render().$el);
+        $('body').append(example2.render().$el);
+        /*****/
+    });
+</script>
+</body>
+</html>

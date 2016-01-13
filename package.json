@@ -17,5 +17,14 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Jacksay/timewalker/issues"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-jshint": "^2.0.0",
+    "gulp-server-livereload": "^1.5.4",
+    "jshint": "^2.9.1-rc3"
   }
 }

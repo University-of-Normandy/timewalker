@@ -1,13 +1,15 @@
 define(['Backbone'], function (Backbone) {
+
+    "use strict";
+
     var TimeViewer, numericDate, unitDateData;
 
-    // ----------------------------------------------------------------- NAMESPACE
+    // --------------------------------------------------------------- NAMESPACE
     TimeViewer = {
         Model: {},
         View: {},
         Templates: {}
     };
-
 
     /**
      * Get date as number
@@ -43,16 +45,12 @@ define(['Backbone'], function (Backbone) {
         throw new Error('Invalid time unit');
     };
 
-    /*--------------------------------------------------------------------------
-     - Configuration des templates par défaut
-     -------------------------------------------------------------------------*/
-
-    // Utilisation du style Mustache
+    // --------------------------------------------------------------- TEMPLATES
+    // Use Mustache's style
     _.templateSettings = {
         interpolate: /\{\{(.+?)\}\}/g
     };
 
-    // Gabarits par défaut
     TimeViewer.Templates.renderSerie = _.template('<h2 class="tv-serie-label">{{label}}</h2><section class="tv-serie-datas"><div class="tv-serie-datas-view tv-view"></div></section>');
     TimeViewer.Templates.renderData = _.template('<strong>{{label}} : </strong><span class="period">du <time class="from">{{start}}</time> au <time class="to">{{end}}</time></span>');
 
@@ -64,7 +62,7 @@ define(['Backbone'], function (Backbone) {
     //////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Données unitaire.
+     * Data.
      */
     TimeViewer.Model.Data = Backbone.Model.extend({
         defaults: function () {
@@ -84,24 +82,22 @@ define(['Backbone'], function (Backbone) {
         }
     });
 
-    // The collection
+    /**
+     * Collection of data
+     */
     TimeViewer.Model.DataCollection = Backbone.Collection.extend({
         model: TimeViewer.Model.Data
     });
 
     /**
-     * Série de données Unitaires
+     * Serie of data
      */
     TimeViewer.Model.Serie = Backbone.Model.extend({
         defaults: function () {
             return {
                 label: "Unamed serie",
                 datas: new TimeViewer.Model.DataCollection()
-            }
-        },
-
-        initialize: function () {
-            // later
+            };
         },
 
         add: function (datas) {
@@ -113,7 +109,9 @@ define(['Backbone'], function (Backbone) {
         }
     });
 
-
+    /**
+     * Model for main view, an aggregate of serie.
+     */
     TimeViewer.Model.TimeViewer = Backbone.Collection.extend({
         model: TimeViewer.Model.Serie,
         getData: function () {
@@ -121,6 +119,11 @@ define(['Backbone'], function (Backbone) {
         }
     });
 
+    /**
+     * Common method for get earliest date
+     *
+     * @type {Function}
+     */
     TimeViewer.Model.Serie.prototype.getMinDate = TimeViewer.Model.TimeViewer.prototype.getMinDate = function () {
         var min = '9999';
         this.getData().each(function (item) {
@@ -131,6 +134,11 @@ define(['Backbone'], function (Backbone) {
         return min == '9999' ? null : min;
     };
 
+    /**
+     * Common method for get the most recent date
+     *
+     * @type {Function}
+     */
     TimeViewer.Model.Serie.prototype.getMaxDate = TimeViewer.Model.TimeViewer.prototype.getMaxDate = function () {
         var max = '0000';
         this.getData().each(function (item) {
@@ -211,7 +219,7 @@ define(['Backbone'], function (Backbone) {
 
             this.$el.html(TimeViewer.Templates.renderData(this.model.toJSON())).css({
                 width: itemWidth + '%',
-                'margin-top': (this.decalage * 10) + 'px',
+                'margin-top': (this.decalage) + 'em',
                 position: 'absolute',
                 left: itemleft + '%'
             });
@@ -250,9 +258,7 @@ define(['Backbone'], function (Backbone) {
                 });
                 datas.append(view.render().$el);
             }.bind(this));
-            console.log(this.$el, decalageCounter);
-            this.$el.css('height',(2+(decalageCounter *.75)) +'em');
-//            this.$el.height('25px'); //('height', (decalage*2)+'em');
+            this.$el.css('height', (2 + (decalageCounter * 0.75)) + 'em');
             return this;
         }
     });
@@ -296,35 +302,29 @@ define(['Backbone'], function (Backbone) {
         // Les modes d'affichage
         displayModes: ['oneyear', 'fill'],
 
+        //
+        rightPos: 0,
+
+        //
+        moveStep: 1,
+
+        // current zoom
+        zoom: 100,
+        zoomGap: 100,
+
         rendeStrategyLayout: function () {
-            return '<h1 class="tv-title">' + this.options.title + '</h1>'
-                + '<header class="tv-series-header">'
-                + '<nav class="tv-header-nav"><a href="#" class="previous">&larr;</a> ~ <a href="#" class="next">&rarr;</a>'
-                + 'Zoom : <a href="#" class="zoomin">zoom +</a> ~ <a href="#" class="zoomout">zoom -</a></nav>'
-                + '<div class="tv-header-labels"><div class="tv-header-labels-view tv-view"></div></div>'
-                + '</header>'
-                + '<div class="tv-series">'
-                + '</div>';
-        },
-
-        /**
-         * Retourne la valeur de date pour l'unité choisie.
-         *
-         * @param date
-         * @param unit
-         * @returns {*}
-         */
-        getUnitData: function (date, unit) {
-            return unitDateData(date, unit);
-        },
-
-        setDisplayMode: function (mode) {
-
-            if (this.displayModes.indexOf(mode)) {
-                console.log("Modification du mode d'affichage");
-                this.period.displayMode = mode;
-                this.trigger('change:displaymode');
-            }
+            return '<h1 class="tv-title">' + this.options.title + '</h1>' +
+                '<header class="tv-series-header">' +
+                '<nav class="tv-header-nav">' +
+                '<a href="#" class="previous">&larr;</a>' +
+                '<a href="#" class="next">&rarr;</a>' +
+                '<a href="#" class="zoomin">agrandir</a>' +
+                '<a href="#" class="zoomout">réduire</a>' +
+                '</nav>' +
+                '<div class="tv-header-labels"><div class="tv-header-labels-view tv-view"></div></div>' +
+                '</header>' +
+                '<div class="tv-series">' +
+                '</div>';
         },
 
         getPeriodDisplayed: function () {
@@ -346,8 +346,9 @@ define(['Backbone'], function (Backbone) {
                 segmentLabelStrategy,
                 display;
 
-            startUse = startAbsolute = this.model.getMinDate();
-            endUse = endAbsolute = this.model.getMaxDate();
+            console.log('Date forcées:', this.options.forceBegining, this.options.forceEnding);
+            startUse = startAbsolute = this.options.forceBegining ? this.options.forceBegining : this.model.getMinDate();
+            endUse = endAbsolute = this.options.forceEnding ? this.options.forceEnding : this.model.getMaxDate();
 
             if (!startUse && !endUse) {
                 startUse = (new Date()).toISOString().substring(0, 4) + '-01-01';
@@ -373,12 +374,10 @@ define(['Backbone'], function (Backbone) {
                     segmentDivisions = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jui', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
                     segmentLabelStrategy = function (value) {
                         return "Année " + value;
-                    }
+                    };
                     break;
                 default :
                     throw new Error("displayMode not implemented");
-                    return;
-
             }
 
             for (var i = parseInt(startUse.substring(0, 4)); i <= endUse.substring(0, 4); i++) {
@@ -401,11 +400,6 @@ define(['Backbone'], function (Backbone) {
             return display;
         },
 
-        rightPos: 0,
-        moveStep: 1,
-        zoom: 100,
-        zoomGap: 100,
-
         handlerZoomIn: function () {
             console.log('ZOOMIN', this.currentSizeStep, this.sizeStep);
             if (this.currentSizeStep > 1) {
@@ -418,16 +412,24 @@ define(['Backbone'], function (Backbone) {
             return this.sizeStep * 100 / (this.sizeStep - this.currentSizeStep + 1);
         },
 
+        /**
+         * Fix the view size.
+         */
         sizing: function () {
             this.$el.find('.tv-view').css('width', (this.getSize()) + '%');
             this.placing();
         },
 
+        /**
+         * Fix the view location
+         */
         placing: function () {
             var right = this.getSize();
             this.$el.find('.tv-view').css('right', -(this.getSize() / this.sizeStep) * this.rightPos + '%');
         },
 
+        ////////////////////////////////////////////////////////////////////////
+        // HANDLERS
         handlerZoomOut: function () {
             if (this.currentSizeStep < this.sizeStep) {
                 this.currentSizeStep += 1;
@@ -449,6 +451,7 @@ define(['Backbone'], function (Backbone) {
             this.placing();
         },
 
+        ////////////////////////////////////////////////////////////////////////
         // CORE METHODS
         initialize: function (attributes, options) {
             this.options = _.extend(this.options, options);
@@ -462,6 +465,7 @@ define(['Backbone'], function (Backbone) {
             var periodDisplay = this.getPeriodDisplayed(),
                 tvDatas,
                 headerTime,
+                i,
                 timeDivisionModel;
 
 
@@ -472,18 +476,18 @@ define(['Backbone'], function (Backbone) {
             timeDivisionModel = $('<div class="tv-header-labels-divisions"></div>');
 
 
-            for (var i = 0; i < periodDisplay.segmentDivisions.length; i++) {
-                timeDivisionModel.append('<span class="division" style="display: inline-block; width: ' + (100 / periodDisplay.segmentDivisions.length) + '%">'
-                    + periodDisplay.segmentDivisions[i]
-                    + '</span>');
+            for (i = 0; i < periodDisplay.segmentDivisions.length; i++) {
+                timeDivisionModel.append('<span class="division" style="display: inline-block; width: ' + (100 / periodDisplay.segmentDivisions.length) + '%">' +
+                    periodDisplay.segmentDivisions[i] +
+                    '</span>');
             }
 
-            for (var i = 0; i < periodDisplay.segmentLabels.length; i++) {
+            for (i = 0; i < periodDisplay.segmentLabels.length; i++) {
 
-                headerTime.append($('<div class="tv-segment-header" style="width: ' + (100 / periodDisplay.segmentLabels.length) + '%">'
-                    + '<h4>' + periodDisplay.segmentLabels[i] + '</h4>'
-                    + timeDivisionModel.clone().html()
-                    + '</div>'));
+                headerTime.append($('<div class="tv-segment-header" style="width: ' + (100 / periodDisplay.segmentLabels.length) + '%">' +
+                    '<h4>' + periodDisplay.segmentLabels[i] + '</h4>' +
+                    timeDivisionModel.clone().html() +
+                    '</div>'));
             }
 
             this.model.each(function (serie) {
@@ -497,7 +501,7 @@ define(['Backbone'], function (Backbone) {
 
             this.sizeStep = periodDisplay.segmentLabels.length;
             this.rightPos = 0;
-            this.currentSizeStep = this.sizeStep - 1;
+            this.currentSizeStep = this.sizeStep;
 
             this.sizing();
             this.placing();
@@ -516,7 +520,7 @@ define(['Backbone'], function (Backbone) {
             var serie;
             if (!this.getSerie(name)) {
                 // Création de la série
-                var serie = new TimeViewer.Model.Serie(datas, {name: name});
+                serie = new TimeViewer.Model.Serie(datas, {name: name});
 
                 // Ajout au modèle
                 this.series.push(serie);
@@ -549,7 +553,7 @@ define(['Backbone'], function (Backbone) {
             return serie;
         },
 
-        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
         // HANDLERS
         onClick: function (event) {
             console.log('click on TimeViewer');

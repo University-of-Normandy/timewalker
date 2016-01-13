@@ -1,91 +1,76 @@
-$color: #999;
-
 .tv {
-  border: solid thin $color;
-  margin: 1em;
-  .tv-title {
+  border: solid thin #999;
+  margin: 1em; }
+  .tv .tv-title {
     font-weight: 100;
     line-height: 2em;
-    color: $color;
+    color: #999;
     padding-left: .5em;
-    border-bottom: lighten($color, 10%) thin solid;
-  }
-  .tv-series-header {
-    height: 3em;
-  }
-}
+    border-bottom: #b3b3b3 thin solid; }
+  .tv .tv-series-header {
+    height: 3em; }
 
 .tv-segement-bg {
-  background: rgba(0,0,0,.05);
+  background: rgba(0, 0, 0, 0.05);
   border: solid thin white;
   display: inline-block;
-  height: 100%;
-  h4 {
-    text-align: center;
-  }
-}
-.division{
+  height: 100%; }
+  .tv-segement-bg h4 {
+    text-align: center; }
+
+.division {
   text-align: center;
   font-size: .75em;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  border-right: thin solid lighten($color, 25%);
-  color: $color;
-  &:last-child{
-    border-right: none;
-  }
-}
+  border-right: thin solid #d9d9d9;
+  color: #999; }
+  .division:last-child {
+    border-right: none; }
+
 .division:nth-child(odd) {
-  background: rgba(255,255,255,.25);
-}
+  background: rgba(255, 255, 255, 0.25); }
 
+.tv-header-labels-view {
+  display: flex; }
 
-.tv-header-labels-view{
-  display: flex;
-}
 .tv-segment-header {
-  flex: 1;
-  h4 {
+  flex: 1; }
+  .tv-segment-header h4 {
     font-size: 1em;
     font-weight: 100;
     text-align: center;
-    margin: 0;
-  }
-}
+    margin: 0; }
+
 .tv-view {
   transition: all .3s linear;
   position: absolute;
   right: 0%;
-  width: 100%;
-}
+  width: 100%; }
 
 .tv-serie, .tv-series-header {
   display: flex;
   border-bottom: dotted #999 thin;
   padding: 4px;
-  position: relative;        }
+  position: relative; }
 
 .tv-serie:hover {
-  background-color: lighten($color, 30%);
-}
+  background-color: #e6e6e6; }
+
 .tv-serie-label, .tv-header-nav {
   flex: 1;
-  border-right: dotted thin $color;
-}
+  border-right: dotted thin #999; }
+
 .tv-serie-datas, .tv-header-labels {
   flex: 4;
   overflow: hidden;
-  position: relative;
-}
-.tv-serie-datas-view {
-
-}
+  position: relative; }
 
 .tv-serie-data {
-  background: rgba(255,50,25, .75);
-  border: solid thin rgba(255,50,25, .75);
-  text-shadow: -1px 1px 1px rgba(0,0,0,.25);
+  background: rgba(255, 50, 25, 0.75);
+  border: solid thin rgba(255, 50, 25, 0.75);
+  text-shadow: -1px 1px 1px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -93,14 +78,13 @@ $color: #999;
   padding: 2px 4px;
   color: aliceblue;
   font-size: .9em;
-  font-weight: 400;
-  &:hover {
-    z-index: 5;
-  }
-}
+  font-weight: 400; }
+  .tv-serie-data:hover {
+    z-index: 5; }
+
 /*************************************************************************/
 .tv-serie-label {
   font-size: 1em;
-  font-weight: 100;
-}
+  font-weight: 100; }
 
+/*# sourceMappingURL=timewalker.css.map */
