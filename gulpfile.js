@@ -35,12 +35,12 @@ gulp.task('jshint:watch', function(){
 
 
 // LIVE SERVER
-
 gulp.task('webserver', function() {
     gulp.src('src')
         .pipe(server({
             livereload: false,
             directoryListing: true,
-            open: true
+            open: true,
+            defaultFile: 'src/demo/index.html'
         }));
 });

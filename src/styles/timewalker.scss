@@ -1,17 +1,38 @@
 $color: #999;
 
 .tv {
-  border: solid thin $color;
+  border: solid thin lighten($color, 20%);
   margin: 1em;
+  box-shadow: 0 0 .5em rgba(0,0,0,.15);
+
+  // Titre du composant
   .tv-title {
     font-weight: 100;
     line-height: 2em;
     color: $color;
     padding-left: .5em;
-    border-bottom: lighten($color, 10%) thin solid;
+    border-bottom: lighten($color, 30%) thin solid;
   }
   .tv-series-header {
     height: 3em;
+
+
+    .tv-header-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      >a {
+        background: lighten($color, 20%);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        display: block;
+      }
+    }
   }
 }
 
@@ -59,15 +80,21 @@ $color: #999;
   right: 0%;
   width: 100%;
 }
+.tv-serie {
+  border-bottom: lighten($color, 30%) thin solid;
+}
+.tv-series-header {
+  border-bottom: lighten($color, 30%) thin solid;
+}
 
 .tv-serie, .tv-series-header {
   display: flex;
-  border-bottom: dotted #999 thin;
+  //border-bottom: dotted #999 thin;
   padding: 4px;
   position: relative;        }
 
 .tv-serie:hover {
-  background-color: lighten($color, 30%);
+  background-color: lighten($color, 35%);
 }
 .tv-serie-label, .tv-header-nav {
   flex: 1;

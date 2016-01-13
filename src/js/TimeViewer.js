@@ -258,7 +258,7 @@ define(['Backbone'], function (Backbone) {
                 });
                 datas.append(view.render().$el);
             }.bind(this));
-            this.$el.css('height', (2 + (decalageCounter * 0.75)) + 'em');
+            this.$el.css('min-height', (2 + (decalageCounter * 0.75)) + 'em');
             return this;
         }
     });
@@ -279,17 +279,17 @@ define(['Backbone'], function (Backbone) {
         className: "tv",
 
         // Rendering options, can be overridden at initialization
-        defaultOptions: function(){
-           return {
-            forceBegining: null, // Force the begining
-            forceEnding: null, // Same for ending
-            title: 'Component title',
-            renderStrategy: {
-                layout: 'rendeStrategyLayout'
-            },
-            labelClass: {}
-         };
-      },
+        defaultOptions: function () {
+            return {
+                forceBegining: null, // Force the begining
+                forceEnding: null, // Same for ending
+                title: 'Component title',
+                renderStrategy: {
+                    layout: 'rendeStrategyLayout'
+                },
+                labelClass: {}
+            };
+        },
 
         period: {
             displayMode: 'oneyear', // Mode d'affichage : oneyear | fill | month
@@ -305,7 +305,8 @@ define(['Backbone'], function (Backbone) {
         displayModes: ['oneyear', 'fill'],
 
         //
-        rightPos: 0,
+        rightPos: null,
+        currentSizeStep: null,
 
         //
         moveStep: 1,
@@ -314,14 +315,47 @@ define(['Backbone'], function (Backbone) {
         zoom: 100,
         zoomGap: 100,
 
+        /**
+         * Get saved state (localstorage)
+         * @returns {*}
+         */
+        getSaveState: function(){
+            var store;
+            if( this.options.saveState && window && window.localStorage ){
+                store = window.localStorage.getItem(this.options.saveState);
+                if( store ){
+                    store = JSON.parse(store);
+                    return store;
+                }
+            }
+            return {
+                rightPos: 0,
+                currentSizeStep: 1
+            };
+        },
+
+        /**
+         * Save current state in localStorage.
+         */
+        saveState: function(){
+          var data = {
+            rightPos: this.rightPos,
+              currentSizeStep: this.currentSizeStep
+          };
+            if( this.options.saveState && window && window.localStorage ){
+                window.localStorage.setItem(this.options.saveState, JSON.stringify(data));
+            }
+        },
+
+
         rendeStrategyLayout: function () {
             return '<h1 class="tv-title">' + this.options.title + '</h1>' +
                 '<header class="tv-series-header">' +
                 '<nav class="tv-header-nav">' +
                 '<a href="#" class="previous">&larr;</a>' +
                 '<a href="#" class="next">&rarr;</a>' +
-                '<a href="#" class="zoomin">agrandir</a>' +
-                '<a href="#" class="zoomout">réduire</a>' +
+                '<a href="#" class="zoomin">-</a>' +
+                '<a href="#" class="zoomout">+</a>' +
                 '</nav>' +
                 '<div class="tv-header-labels"><div class="tv-header-labels-view tv-view"></div></div>' +
                 '</header>' +
@@ -403,11 +437,11 @@ define(['Backbone'], function (Backbone) {
         },
 
         handlerZoomIn: function () {
-            console.log('ZOOMIN', this.currentSizeStep, this.sizeStep);
             if (this.currentSizeStep > 1) {
                 this.currentSizeStep -= 1;
             }
             this.sizing();
+            this.saveState();
         },
 
         getSize: function () {
@@ -437,6 +471,7 @@ define(['Backbone'], function (Backbone) {
                 this.currentSizeStep += 1;
             }
             this.sizing();
+            this.saveState();
         },
 
         handlerScrollRight: function () {
@@ -444,6 +479,7 @@ define(['Backbone'], function (Backbone) {
                 this.rightPos--;
             }
             this.placing();
+            this.saveState();
         },
 
         handlerScrollLeft: function () {
@@ -451,6 +487,7 @@ define(['Backbone'], function (Backbone) {
                 this.rightPos++;
             }
             this.placing();
+            this.saveState();
         },
 
         ////////////////////////////////////////////////////////////////////////
@@ -502,13 +539,26 @@ define(['Backbone'], function (Backbone) {
             }.bind(this));
 
             this.sizeStep = periodDisplay.segmentLabels.length;
-            this.rightPos = 0;
-            this.currentSizeStep = this.sizeStep;
+            this.rightPos = this.getSaveState().rightPos;
+            this.currentSizeStep = this.getSaveState().currentSizeStep;
 
             this.sizing();
             this.placing();
 
             return this;
+        },
+
+        getCurrentSizeStep: function(){
+
+        },
+
+        /**
+         * Retourne la position initiale
+         */
+        getRightPos: function(){
+            if( this.rightPos === undefined ){
+                this.rightPos = this.get
+            }
         },
 
         // WORK
