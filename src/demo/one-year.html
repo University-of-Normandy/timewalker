@@ -6,6 +6,7 @@
     <script src="../js/lib/requirejs/require.js"
             data-main="../js/dependencies.js"></script>
     <link rel="stylesheet" href="../styles/timewalker.css" />
+    <link rel="stylesheet" href="../styles/timewalker-extras.css" />
 </head>
 <body>
 <style>
@@ -24,11 +25,6 @@
     html, body {
         font-family: 'Open Sans', Helvetica, Arial, sans-serif;
         font-size: 16px;
-    }
-
-    .data-pink {
-        background: rgba(204,0,102, .75);
-        border: solid thin rgba(204,0,102, .9);
     }
 </style>
 <script>
@@ -51,7 +47,8 @@
             labelClass : {
                 'Développeur': 'data-blue',
                 'Concepteur': 'data-pink'
-            }
+            },
+            forceBegining: '2010-01-01'
         });
 
         var serie2 = new TimeViewer.Model.Serie({
@@ -60,15 +57,17 @@
         serie2.add([
             {label: "Label A",  start: '2016-01-01',    end: '2016-12-31'},
             {label: "Label B",  start: '2015-01-01',    end: '2015-12-31'},
-            {label: "Label C",   start: '2015-06-01',    end: '2016-06-31'}
+            {label: "Label C",   start: '2015-06-01',    end: '2016-06-31'},
+            {label: "Label B",  start: '2016-02-01',    end: '2016-04-31'}
         ]);
         var all2 = new TimeViewer.Model.TimeViewer([serie2]);
 
         example2 = new TimeViewer.View.Main({model: all2}, {
             title: "Membres de l'équipe",
             labelClass : {
-                'Développeur': 'data-blue',
-                'Concepteur': 'data-pink'
+                'Label A': 'data-blue',
+                'Label B': 'data-pink',
+                'Label C': 'data-green'
             },
             forceBegining: '2014-01-01'
         });

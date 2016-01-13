@@ -15,7 +15,7 @@ var gulp = require('gulp'),
 gulp.task('sass', function(){
     gulp.src(paths.sass +'*.scss')
         .pipe(sass())
-        .pipe(gulp.dest(path.sass));
+        .pipe(gulp.dest(paths.sass));
 });
 
 gulp.task('sass:watch', function(){

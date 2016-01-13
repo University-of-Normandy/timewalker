@@ -1,0 +1,33 @@
+@mixin label( $color ){
+   box-shadow: inset -8px 8px 8px rgba(0,0,0,.25);
+   background: rgba($color, .75);
+   border: solid thin rgba($color, .9);
+}
+
+.data-red {
+   @include label(#A60000);
+}
+
+.data-blue {
+   @include label(#1240AB);
+}
+
+.data-green {
+   @include label(#007536);
+}
+
+.data-yellow {
+   @include label(#FFD100);
+}
+
+.data-orange {
+   @include label(#FF6400);
+}
+
+.data-pink {
+   @include label(#CD0074);
+}
+
+.data-purple {
+   @include label(#530FAD);
+}

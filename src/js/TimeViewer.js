@@ -279,7 +279,8 @@ define(['Backbone'], function (Backbone) {
         className: "tv",
 
         // Rendering options, can be overridden at initialization
-        options: {
+        defaultOptions: function(){
+           return {
             forceBegining: null, // Force the begining
             forceEnding: null, // Same for ending
             title: 'Component title',
@@ -287,7 +288,8 @@ define(['Backbone'], function (Backbone) {
                 layout: 'rendeStrategyLayout'
             },
             labelClass: {}
-        },
+         };
+      },
 
         period: {
             displayMode: 'oneyear', // Mode d'affichage : oneyear | fill | month
@@ -454,7 +456,7 @@ define(['Backbone'], function (Backbone) {
         ////////////////////////////////////////////////////////////////////////
         // CORE METHODS
         initialize: function (attributes, options) {
-            this.options = _.extend(this.options, options);
+            this.options = _.extend(this.defaultOptions(), options);
             if (!this.model) {
                 console.log("Création d'un modèle vide");
                 this.model = new TimeViewer.Model.TimeViewer();
