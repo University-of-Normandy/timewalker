@@ -1,5 +1,5 @@
 @mixin label( $color ){
-   box-shadow: inset 4px -4px 8px rgba(0,0,0,.25), inset -2px 2px 4px rgba(255,255,255,.3);
+   //box-shadow: inset 4px -4px 8px rgba(0,0,0,.25), inset -2px 2px 4px rgba(255,255,255,.3);
    background: rgba($color, .75);
    border: solid thin rgba($color, .9);
    color: lighten($color, 50%);
