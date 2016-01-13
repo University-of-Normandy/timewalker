@@ -44,3 +44,5 @@ gulp.task('webserver', function() {
             defaultFile: 'src/demo/index.html'
         }));
 });
+
+gulp.task('dev', ['sass:watch', 'jshint:watch', 'webserver']);
