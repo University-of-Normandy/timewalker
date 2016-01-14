@@ -127,7 +127,9 @@ define(['Backbone'], function (Backbone) {
     TimeViewer.Model.Serie.prototype.getMinDate = TimeViewer.Model.TimeViewer.prototype.getMinDate = function () {
         var min = '9999';
         this.getData().each(function (item) {
-            if (item.getMinDate() < min) {
+
+            if (item.getMinDate() !== null && item.getMinDate() < min) {
+                console.log(item.getMinDate(), 'est plus petit que', min);
                 min = item.getMinDate();
             }
         });
@@ -142,7 +144,7 @@ define(['Backbone'], function (Backbone) {
     TimeViewer.Model.Serie.prototype.getMaxDate = TimeViewer.Model.TimeViewer.prototype.getMaxDate = function () {
         var max = '0000';
         this.getData().each(function (item) {
-            if (item.getMaxDate() > max) {
+            if (item.getMaxDate() !== null && item.getMaxDate() > max) {
                 max = item.getMaxDate();
             }
         });
@@ -183,7 +185,7 @@ define(['Backbone'], function (Backbone) {
             var
             // begining of period
                 numericBegin = this.periodDisplay.numericStart,
-                numericEnd = this.periodDisplay.numericStart,
+                numericEnd = this.periodDisplay.numericEnd,
             // begining of current item
                 itemStart = this.model.get('start') ? numericDate(new Date(this.model.get('start'))) : numericBegin,
 
@@ -197,6 +199,7 @@ define(['Backbone'], function (Backbone) {
                 itemleft = (itemStart - numericBegin) * ratio,
                 itemWidth = ((itemEnd - itemStart)) * ratio
                 ;
+
 
             // Add cosmetic CSS classes
             if (!this.model.get('end')) {
@@ -237,9 +240,6 @@ define(['Backbone'], function (Backbone) {
             this.$el.html(TimeViewer.Templates.renderSerie(this.model.toJSON()));
             var datas = this.$el.find('.tv-serie-datas .tv-serie-datas-view') || this.$el;
             var decalage = {}, decalageCounter = 0;
-
-            // Affichage du début
-            console.log("Affichage du début", this.periodDisplay.startUse, this.periodDisplay.segments);
 
             // Display "left maker", the effective begining
             var startMarker = $('<div class="tv-marker tv-start">M</div>').css({
@@ -478,13 +478,7 @@ define(['Backbone'], function (Backbone) {
             return display;
         },
 
-        handlerZoomIn: function () {
-            if (this.currentSizeStep > 1) {
-                this.currentSizeStep -= 1;
-            }
-            this.sizing();
-            this.saveState();
-        },
+
 
         getSize: function () {
             return this.sizeStep * 100 / (this.sizeStep - this.currentSizeStep + 1);
@@ -508,28 +502,40 @@ define(['Backbone'], function (Backbone) {
 
         ////////////////////////////////////////////////////////////////////////
         // HANDLERS
-        handlerZoomOut: function () {
+        handlerZoomOut: function ( evt ) {
             if (this.currentSizeStep < this.sizeStep) {
                 this.currentSizeStep += 1;
             }
             this.sizing();
             this.saveState();
+            evt.preventDefault();
         },
 
-        handlerScrollRight: function () {
+        handlerZoomIn: function ( evt ) {
+            if (this.currentSizeStep > 1) {
+                this.currentSizeStep -= 1;
+            }
+            this.sizing();
+            this.saveState();
+            evt.preventDefault();
+        },
+
+        handlerScrollRight: function ( evt ) {
             if (this.rightPos > 0) {
                 this.rightPos--;
             }
             this.placing();
             this.saveState();
+            evt.preventDefault();
         },
 
-        handlerScrollLeft: function () {
+        handlerScrollLeft: function ( evt ) {
             if (this.rightPos < this.sizeStep - 1) {
                 this.rightPos++;
             }
             this.placing();
             this.saveState();
+            evt.preventDefault();
         },
 
         ////////////////////////////////////////////////////////////////////////
@@ -537,7 +543,6 @@ define(['Backbone'], function (Backbone) {
         initialize: function (attributes, options) {
             this.options = _.extend(this.defaultOptions(), options);
             if (!this.model) {
-                console.log("Création d'un modèle vide");
                 this.model = new TimeViewer.Model.TimeViewer();
             }
         },
@@ -613,18 +618,6 @@ define(['Backbone'], function (Backbone) {
             return serie;
         },
 
-        displayPreviousPeriod: function () {
-            console.log('todo', 'display previous period');
-        },
-
-        displayNextPeriod: function () {
-            console.log('todo', 'display next period');
-        },
-
-        displayCurrentPeriod: function () {
-
-        },
-
         /**
          * Return serie by name, null if not.
          */
@@ -637,12 +630,6 @@ define(['Backbone'], function (Backbone) {
             });
             return serie;
         },
-
-        ////////////////////////////////////////////////////////////////////////
-        // HANDLERS
-        onClick: function (event) {
-            console.log('click on TimeViewer');
-        }
     });
     return TimeViewer;
 });

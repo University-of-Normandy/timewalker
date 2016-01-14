@@ -115,6 +115,12 @@
   font-weight: 400; }
   .tv-serie-data:hover {
     z-index: 5; }
+  .tv-serie-data.nostart {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0; }
+  .tv-serie-data.noend {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0; }
 
 /*************************************************************************/
 .tv-serie-label {

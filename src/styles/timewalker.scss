@@ -152,6 +152,14 @@ $color: #999;
   &:hover {
     z-index: 5;
   }
+  &.nostart {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  &.noend {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
 /*************************************************************************/
 .tv-serie-label {
