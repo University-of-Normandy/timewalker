@@ -52,7 +52,7 @@ define(['Backbone'], function (Backbone) {
     };
 
     TimeViewer.Templates.renderSerie = _.template('<h2 class="tv-serie-label">{{label}}</h2><section class="tv-serie-datas"><div class="tv-serie-datas-view tv-view"></div></section>');
-    TimeViewer.Templates.renderData = _.template('<strong>{{label}} : </strong><span class="period">du <time class="from">{{start}}</time> au <time class="to">{{end}}</time></span>');
+    TimeViewer.Templates.renderData = _.template('<strong>{{label}}</strong>'); //<span class="period">du <time class="from">{{start}}</time> au <time class="to">{{end}}</time></span>
 
 
     //////////////////////////////////////////////////////////////////////////////
@@ -239,7 +239,43 @@ define(['Backbone'], function (Backbone) {
             var decalage = {}, decalageCounter = 0;
 
             // Affichage du début
-            console.log("Affichage du début", this.periodDisplay.startUse);
+            console.log("Affichage du début", this.periodDisplay.startUse, this.periodDisplay.segments);
+
+            // Display "left maker", the effective begining
+            var startMarker = $('<div class="tv-marker tv-start">M</div>').css({
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: '-2000%',
+                width: ((numericDate(new Date(this.periodDisplay.startUse)) - this.periodDisplay.numericStart)*this.periodDisplay.ratio)+2000+'%',
+                'z-index': 20
+            });
+            datas.append(startMarker);
+
+            // Display "right maker", the effective ending
+            var endMarker = $('<div class="tv-marker tv-end">M</div>').css({
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: ((numericDate(new Date(this.periodDisplay.endUse)) - this.periodDisplay.numericStart)*this.periodDisplay.ratio)+'%',
+                right: 0,
+                'z-index': 20
+            });
+
+            datas.append(endMarker);
+
+            // Other visual help
+            for( var j=0; j<this.periodDisplay.segments; j++ ){
+                var weft = $('<div class="tv-weft">&nbsp;</div>').css({
+                    position: 'absolute',
+                    'z-index': 0,
+                    width: (100/this.periodDisplay.segments)+'%',
+                    bottom: 0,
+                    top: 0,
+                    left: (j*(100/this.periodDisplay.segments))+'%'
+                });
+                datas.append(weft);
+            }
 
 
             this.model.get('datas').each(function (data) {
@@ -381,13 +417,8 @@ define(['Backbone'], function (Backbone) {
                 segmentLabelStrategy,
                 display;
 
-            console.log('Date forcées:', this.options.forceBegining, this.options.forceEnding);
-
-
-
             startUse = startAbsolute = this.options.forceBegining ? this.options.forceBegining : this.model.getMinDate();
             endUse = endAbsolute = this.options.forceEnding ? this.options.forceEnding : this.model.getMaxDate();
-
 
             if (!startUse && !endUse) {
                 startUse = (new Date()).toISOString().substring(0, 4) + '-01-01';
@@ -561,15 +592,6 @@ define(['Backbone'], function (Backbone) {
 
         getCurrentSizeStep: function(){
 
-        },
-
-        /**
-         * Retourne la position initiale
-         */
-        getRightPos: function(){
-            if( this.rightPos === undefined ){
-                this.rightPos = this.get
-            }
         },
 
         // WORK

@@ -5,6 +5,33 @@ $color: #999;
   margin: 1em;
   box-shadow: 0 0 .5em rgba(0,0,0,.15);
 
+  .tv-view {
+    transition: all .3s linear;
+    position: absolute;
+    right: 0%;
+    width: 100%;
+    height: 100%;
+  }
+
+  .tv-weft {
+    border-right: dashed rgba($color, .4) thin;
+    background-color: rgba($color, .2);
+    &:nth-child(odd){
+      background-color: rgba($color,.1);
+    }
+  }
+
+  .tv-marker {
+    background-color: rgba(255,255,255,.75);
+    &.tv-start {
+      border-right: solid 2px #000;
+    }
+
+    &.tv-end {
+      border-left: solid 4px #555;
+    }
+  }
+
   // Titre du composant
   .tv-title {
     font-weight: 100;
@@ -74,12 +101,7 @@ $color: #999;
     margin: 0;
   }
 }
-.tv-view {
-  transition: all .3s linear;
-  position: absolute;
-  right: 0%;
-  width: 100%;
-}
+
 .tv-serie {
   border-bottom: lighten($color, 30%) thin solid;
 }
@@ -91,7 +113,9 @@ $color: #999;
   display: flex;
   //border-bottom: dotted #999 thin;
   padding: 4px;
-  position: relative;        }
+  position: relative;
+  height: 100%;
+}
 
 .tv-serie:hover {
   background-color: lighten($color, 35%);
@@ -107,6 +131,10 @@ $color: #999;
 }
 .tv-serie-datas-view {
 
+}
+
+.tv-serie-datas {
+  background-color: rgba($color, .1);
 }
 
 .tv-serie-data {

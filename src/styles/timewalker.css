@@ -2,6 +2,23 @@
   border: solid thin #cccccc;
   margin: 1em;
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.15); }
+  .tv .tv-view {
+    transition: all .3s linear;
+    position: absolute;
+    right: 0%;
+    width: 100%;
+    height: 100%; }
+  .tv .tv-weft {
+    border-right: dashed rgba(153, 153, 153, 0.4) thin;
+    background-color: rgba(153, 153, 153, 0.2); }
+    .tv .tv-weft:nth-child(odd) {
+      background-color: rgba(153, 153, 153, 0.1); }
+  .tv .tv-marker {
+    background-color: rgba(255, 255, 255, 0.75); }
+    .tv .tv-marker.tv-start {
+      border-right: solid 2px #000; }
+    .tv .tv-marker.tv-end {
+      border-left: solid 4px #555; }
   .tv .tv-title {
     font-weight: 100;
     line-height: 2em;
@@ -57,12 +74,6 @@
     text-align: center;
     margin: 0; }
 
-.tv-view {
-  transition: all .3s linear;
-  position: absolute;
-  right: 0%;
-  width: 100%; }
-
 .tv-serie {
   border-bottom: #e6e6e6 thin solid; }
 
@@ -72,7 +83,8 @@
 .tv-serie, .tv-series-header {
   display: flex;
   padding: 4px;
-  position: relative; }
+  position: relative;
+  height: 100%; }
 
 .tv-serie:hover {
   background-color: #f2f2f2; }
@@ -85,6 +97,9 @@
   flex: 4;
   overflow: hidden;
   position: relative; }
+
+.tv-serie-datas {
+  background-color: rgba(153, 153, 153, 0.1); }
 
 .tv-serie-data {
   background: rgba(255, 50, 25, 0.75);
