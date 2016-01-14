@@ -1,34 +1,62 @@
 .data-red {
-  box-shadow: inset -8px 8px 8px rgba(0, 0, 0, 0.25);
   background: rgba(166, 0, 0, 0.75);
-  border: solid thin rgba(166, 0, 0, 0.9); }
+  border: solid thin rgba(166, 0, 0, 0.9);
+  color: #ffa6a6;
+  cursor: default; }
+  .data-red:hover {
+    border: solid thin #a60000;
+    background: #a60000; }
 
 .data-blue {
-  box-shadow: inset -8px 8px 8px rgba(0, 0, 0, 0.25);
   background: rgba(18, 64, 171, 0.75);
-  border: solid thin rgba(18, 64, 171, 0.9); }
+  border: solid thin rgba(18, 64, 171, 0.9);
+  color: #c3d3f9;
+  cursor: default; }
+  .data-blue:hover {
+    border: solid thin #1240ab;
+    background: #1240ab; }
 
 .data-green {
-  box-shadow: inset -8px 8px 8px rgba(0, 0, 0, 0.25);
   background: rgba(0, 117, 54, 0.75);
-  border: solid thin rgba(0, 117, 54, 0.9); }
+  border: solid thin rgba(0, 117, 54, 0.9);
+  color: #75ffb5;
+  cursor: default; }
+  .data-green:hover {
+    border: solid thin #007536;
+    background: #007536; }
 
 .data-yellow {
-  box-shadow: inset -8px 8px 8px rgba(0, 0, 0, 0.25);
   background: rgba(255, 209, 0, 0.75);
-  border: solid thin rgba(255, 209, 0, 0.9); }
+  border: solid thin rgba(255, 209, 0, 0.9);
+  color: white;
+  cursor: default; }
+  .data-yellow:hover {
+    border: solid thin #ffd100;
+    background: #ffd100; }
 
 .data-orange {
-  box-shadow: inset -8px 8px 8px rgba(0, 0, 0, 0.25);
   background: rgba(255, 100, 0, 0.75);
-  border: solid thin rgba(255, 100, 0, 0.9); }
+  border: solid thin rgba(255, 100, 0, 0.9);
+  color: white;
+  cursor: default; }
+  .data-orange:hover {
+    border: solid thin #ff6400;
+    background: #ff6400; }
 
 .data-pink {
-  box-shadow: inset -8px 8px 8px rgba(0, 0, 0, 0.25);
   background: rgba(205, 0, 116, 0.75);
-  border: solid thin rgba(205, 0, 116, 0.9); }
+  border: solid thin rgba(205, 0, 116, 0.9);
+  color: #ffcde9;
+  cursor: default; }
+  .data-pink:hover {
+    border: solid thin #cd0074;
+    background: #cd0074; }
 
 .data-purple {
-  box-shadow: inset -8px 8px 8px rgba(0, 0, 0, 0.25);
   background: rgba(83, 15, 173, 0.75);
-  border: solid thin rgba(83, 15, 173, 0.9); }
+  border: solid thin rgba(83, 15, 173, 0.9);
+  color: #dac1fa;
+  cursor: default; }
+  .data-purple:hover {
+    border: solid thin #530fad;
+    background: #530fad; }

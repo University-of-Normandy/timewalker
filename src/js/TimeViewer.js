@@ -182,11 +182,8 @@ define(['Backbone'], function (Backbone) {
         render: function () {
             var
             // begining of period
-                numericBegin = numericDate(new Date(this.periodDisplay.startUse)),
-
-            // end of period
-                numericEnd = numericDate(new Date(this.periodDisplay.endUse)),
-
+                numericBegin = this.periodDisplay.numericStart,
+                numericEnd = this.periodDisplay.numericStart,
             // begining of current item
                 itemStart = this.model.get('start') ? numericDate(new Date(this.model.get('start'))) : numericBegin,
 
@@ -194,7 +191,7 @@ define(['Backbone'], function (Backbone) {
                 itemEnd = this.model.get('end') ? numericDate(new Date(this.model.get('end'))) : numericEnd,
 
             // ratio
-                ratio = 100 / (numericEnd - numericBegin),
+                ratio = this.periodDisplay.ratio,
 
             // Calculate item width/position
                 itemleft = (itemStart - numericBegin) * ratio,
@@ -210,11 +207,6 @@ define(['Backbone'], function (Backbone) {
             }
             if (this.options.labelClass[this.model.get('label')]) {
                 this.$el.addClass(this.options.labelClass[this.model.get('label')]);
-            }
-
-            if (!this.options.test) {
-                this.options.test = true;
-                console.log("Création d'un pointeur dans les options");
             }
 
             this.$el.html(TimeViewer.Templates.renderData(this.model.toJSON())).css({
@@ -245,6 +237,10 @@ define(['Backbone'], function (Backbone) {
             this.$el.html(TimeViewer.Templates.renderSerie(this.model.toJSON()));
             var datas = this.$el.find('.tv-serie-datas .tv-serie-datas-view') || this.$el;
             var decalage = {}, decalageCounter = 0;
+
+            // Affichage du début
+            console.log("Affichage du début", this.periodDisplay.startUse);
+
 
             this.model.get('datas').each(function (data) {
                 if (!decalage[data.get('label')]) {
@@ -372,6 +368,9 @@ define(['Backbone'], function (Backbone) {
             // si ces dernières sont null, dans ce cas on utilise une plage d'un
             // an avant/après l'autre date. Si aucune date on prend l'année en
             // cour.
+                numericStart,
+                numericEnd,
+                ratio,
                 endUse,     // Fin utilisée
                 startUse,    // Fin utilisée
                 startDisplay,
@@ -383,8 +382,12 @@ define(['Backbone'], function (Backbone) {
                 display;
 
             console.log('Date forcées:', this.options.forceBegining, this.options.forceEnding);
+
+
+
             startUse = startAbsolute = this.options.forceBegining ? this.options.forceBegining : this.model.getMinDate();
             endUse = endAbsolute = this.options.forceEnding ? this.options.forceEnding : this.model.getMaxDate();
+
 
             if (!startUse && !endUse) {
                 startUse = (new Date()).toISOString().substring(0, 4) + '-01-01';
@@ -398,11 +401,16 @@ define(['Backbone'], function (Backbone) {
             }
 
             if (this.period.startDisplay == 'auto') {
-                startDisplay = endUse.substring(0, 4) + '-01-01';
+                startDisplay = startUse.substring(0, 4) + '-01-01';
             }
             if (this.period.endDisplay == 'auto') {
                 endDisplay = endUse.substring(0, 4) + '-12-31';
             }
+
+            // begining of period
+            numericStart = numericDate(new Date(startDisplay));
+            numericEnd = numericDate(new Date(endDisplay));
+            ratio = 100 / (numericEnd - numericStart);
 
             switch (this.period.displayMode) {
                 case 'oneyear':
@@ -431,6 +439,9 @@ define(['Backbone'], function (Backbone) {
                 endUse: endUse,
                 startDisplay: startDisplay,
                 endDisplay: endDisplay,
+                numericStart: numericStart,
+                numericEnd: numericEnd,
+                ratio: ratio
             };
 
             return display;

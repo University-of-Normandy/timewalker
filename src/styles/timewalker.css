@@ -1,14 +1,28 @@
 .tv {
-  border: solid thin #999;
-  margin: 1em; }
+  border: solid thin #cccccc;
+  margin: 1em;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.15); }
   .tv .tv-title {
     font-weight: 100;
     line-height: 2em;
     color: #999;
     padding-left: .5em;
-    border-bottom: #b3b3b3 thin solid; }
+    border-bottom: #e6e6e6 thin solid; }
   .tv .tv-series-header {
     height: 3em; }
+    .tv .tv-series-header .tv-header-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center; }
+      .tv .tv-series-header .tv-header-nav > a {
+        background: #cccccc;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        display: block; }
 
 .tv-segement-bg {
   background: rgba(0, 0, 0, 0.05);
@@ -49,14 +63,19 @@
   right: 0%;
   width: 100%; }
 
+.tv-serie {
+  border-bottom: #e6e6e6 thin solid; }
+
+.tv-series-header {
+  border-bottom: #e6e6e6 thin solid; }
+
 .tv-serie, .tv-series-header {
   display: flex;
-  border-bottom: dotted #999 thin;
   padding: 4px;
   position: relative; }
 
 .tv-serie:hover {
-  background-color: #e6e6e6; }
+  background-color: #f2f2f2; }
 
 .tv-serie-label, .tv-header-nav {
   flex: 1;
