@@ -654,6 +654,12 @@ define(['Backbone'], function (Backbone) {
             this.currentSizeStep = this.getSaveState().currentSizeStep;
 
             this.sizing(false);
+
+            var interval = setInterval(function(){
+                this.triggerChange();
+                clearInterval(interval);
+            }.bind(this), 50);
+
             return this;
         },
         triggerChange: function(){
