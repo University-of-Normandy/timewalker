@@ -253,7 +253,7 @@ define(['Backbone'], function (Backbone) {
             datas.append(startMarker);
 
             // Display "right maker", the effective ending
-            var endMarker = $('<div class="tv-marker tv-end">M</div>').css({
+            var endMarker = $('<div class="tv-marker tv-end">&nbsp;</div>').css({
                 position: 'absolute',
                 top: 0,
                 bottom: 0,
