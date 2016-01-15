@@ -52,7 +52,7 @@ define(['Backbone'], function (Backbone) {
     };
 
     TimeViewer.Templates.renderSerie = _.template('<h2 class="tv-serie-label">{{label}}</h2><section class="tv-serie-datas"><div class="tv-serie-datas-view tv-view"></div></section>');
-    TimeViewer.Templates.renderData = _.template('<strong>{{label}}</strong>'); //<span class="period">du <time class="from">{{start}}</time> au <time class="to">{{end}}</time></span>
+    TimeViewer.Templates.renderData = _.template('<strong class="tv-data-label">{{label}}</strong>'); //<span class="period">du <time class="from">{{start}}</time> au <time class="to">{{end}}</time></span>
 
 
     //////////////////////////////////////////////////////////////////////////////
@@ -127,9 +127,7 @@ define(['Backbone'], function (Backbone) {
     TimeViewer.Model.Serie.prototype.getMinDate = TimeViewer.Model.TimeViewer.prototype.getMinDate = function () {
         var min = '9999';
         this.getData().each(function (item) {
-
             if (item.getMinDate() !== null && item.getMinDate() < min) {
-                console.log(item.getMinDate(), 'est plus petit que', min);
                 min = item.getMinDate();
             }
         });
@@ -174,6 +172,39 @@ define(['Backbone'], function (Backbone) {
             this.decalage = options.decalage;
             this.periodDisplay = options.periodDisplay;
             this.options = options.options;
+            this.serieView = options.serieView;
+            this.serieView.mainView.on('updateview', function(){
+                this.interval = setInterval(function(){
+                    this.adjustLabelPosition();
+                }.bind(this), 500);
+            }.bind(this));
+        },
+
+        adjustLabelPosition: function(){
+
+            var itemSize = {
+                left: this.$el.offset().left,
+                right: this.$el.width() + this.$el.offset().left
+            };
+            var maskSize = {
+                left: this.serieView.getMask().offset().left,
+                right: this.serieView.getMask().width() + this.serieView.getMask().offset().left
+            };
+
+            if( !(itemSize.right < maskSize.left || itemSize.left > maskSize.right) ){
+                var padding = 0;
+                if( itemSize.left < maskSize.left ){
+                    padding = 100 / (itemSize.right - itemSize.left) * (maskSize.left - itemSize.left);
+                }
+                this.$el.find('.tv-data-label').css('padding-left', padding+'%');
+
+            }
+
+            clearInterval(this.interval);
+        },
+
+        isVisible: function(){
+            // return this.$el.is(':visible');
         },
 
         /**
@@ -230,15 +261,39 @@ define(['Backbone'], function (Backbone) {
         className: "tv-serie",
         options: {},
 
+
         initialize: function (options) {
             this.renderers = options.renderers || {};
             this.periodDisplay = options.periodDisplay;
             this.options = _.extend(this.options, options.options);
+            this.mainView = options.mainView;
+        },
+
+        getViewport: function(){
+            return this.$el.find('.tv-serie-datas .tv-serie-datas-view') || this.$el;
+        },
+
+        /**
+         * @returns jquery
+         */
+        getMask: function(){
+            return this.$el.find('.tv-serie-datas');
+        },
+
+        getMaskBounds: function(){
+            if( this.maskBounds === undefined ){
+                var offset = this.getMask().offset();
+                this.maskBounds = {
+                    left: offset.left,
+                    right: offset.left + this.getMask().width()
+                };
+            }
+            return this.maskBounds;
         },
 
         render: function () {
             this.$el.html(TimeViewer.Templates.renderSerie(this.model.toJSON()));
-            var datas = this.$el.find('.tv-serie-datas .tv-serie-datas-view') || this.$el;
+            var datas = this.getViewport();
             var decalage = {}, decalageCounter = 0;
 
             // Display "left maker", the effective begining
@@ -286,7 +341,8 @@ define(['Backbone'], function (Backbone) {
                     model: data,
                     decalage: decalage[data.get('label')],
                     periodDisplay: this.periodDisplay,
-                    options: this.options
+                    options: this.options,
+                    serieView: this
                 });
                 datas.append(view.render().$el);
             }.bind(this));
@@ -484,20 +540,27 @@ define(['Backbone'], function (Backbone) {
             return this.sizeStep * 100 / (this.sizeStep - this.currentSizeStep + 1);
         },
 
+        getRight: function(){
+            return -(this.getSize() / this.sizeStep) * this.rightPos;
+        },
+
         /**
          * Fix the view size.
          */
-        sizing: function () {
+        sizing: function (trigger) {
             this.$el.find('.tv-view').css('width', (this.getSize()) + '%');
-            this.placing();
+            this.placing(trigger);
         },
 
         /**
          * Fix the view location
          */
-        placing: function () {
+        placing: function (trigger) {
             var right = this.getSize();
-            this.$el.find('.tv-view').css('right', -(this.getSize() / this.sizeStep) * this.rightPos + '%');
+            this.$el.find('.tv-view').css('right', this.getRight() + '%');
+            if( trigger && trigger === true ){
+                this.trigger('updateview');
+            }
         },
 
         ////////////////////////////////////////////////////////////////////////
@@ -506,7 +569,7 @@ define(['Backbone'], function (Backbone) {
             if (this.currentSizeStep < this.sizeStep) {
                 this.currentSizeStep += 1;
             }
-            this.sizing();
+            this.sizing(true);
             this.saveState();
             evt.preventDefault();
         },
@@ -515,7 +578,7 @@ define(['Backbone'], function (Backbone) {
             if (this.currentSizeStep > 1) {
                 this.currentSizeStep -= 1;
             }
-            this.sizing();
+            this.sizing(true);
             this.saveState();
             evt.preventDefault();
         },
@@ -524,7 +587,7 @@ define(['Backbone'], function (Backbone) {
             if (this.rightPos > 0) {
                 this.rightPos--;
             }
-            this.placing();
+            this.placing(true);
             this.saveState();
             evt.preventDefault();
         },
@@ -533,7 +596,7 @@ define(['Backbone'], function (Backbone) {
             if (this.rightPos < this.sizeStep - 1) {
                 this.rightPos++;
             }
-            this.placing();
+            this.placing(true);
             this.saveState();
             evt.preventDefault();
         },
@@ -580,6 +643,7 @@ define(['Backbone'], function (Backbone) {
                 var view = new TimeViewer.View.Serie({
                     model: serie,
                     periodDisplay: periodDisplay,
+                    mainView: this,
                     options: this.options
                 });
                 tvDatas.append(view.render().$el);
@@ -589,12 +653,12 @@ define(['Backbone'], function (Backbone) {
             this.rightPos = this.getSaveState().rightPos;
             this.currentSizeStep = this.getSaveState().currentSizeStep;
 
-            this.sizing();
-            this.placing();
-
+            this.sizing(false);
             return this;
         },
-
+        triggerChange: function(){
+          this.trigger('updateview');
+        },
         getCurrentSizeStep: function(){
 
         },

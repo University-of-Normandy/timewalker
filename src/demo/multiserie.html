@@ -50,7 +50,7 @@
         });
         serie2.add([
             {
-                label: "Label D",
+                label: "Test",
                 start: '2010-01-01',
                 end: '2011-06-15'
             },
@@ -77,33 +77,33 @@
         });
         serie4.add([
             {
-                label: "Label D",
+                label: "4.1",
                 start: '2009-01-01',
                 end: '2009-12-31'
             },
             {
-                label: "Label D",
+                label: "4.2",
                 start: '2010-01-01',
                 end: '2010-05-28'
             },
             {
-                label: "Label D",
+                label: "4.3",
                 start: '2011-01-01',
                 end: '2011-05-28'
             },{
-                label: "Label D",
+                label: "4.4",
                 start: '2012-01-01',
                 end: '2012-05-28'
             },{
-                label: "Label D",
+                label: "4.5",
                 start: '2013-01-01',
                 end: '2013-05-28'
             },{
-                label: "Label D",
+                label: "4.6",
                 start: '2014-01-01',
                 end: '2014-05-28'
             },{
-                label: "Label D",
+                label: "4.7",
                 start: '2015-01-01',
                 end: '2015-05-28'
             }
@@ -124,13 +124,15 @@
                 'Label B': 'data-green',
                 'Label C': 'data-yellow',
                 'Label D': 'data-purple',
-                'Label E': 'data-red'
+                'Label E': 'data-red',
+                'Test' : 'date-orange'
             },
-            forceBegining: '2010-06-01',
-            forceEnding: '2011-06-30'
+            forceBegining: '2009-06-01',
+            forceEnding: '2015-06-30'
         });
 
         $('body').append(example.render().$el);
+        example.triggerChange();
         /*****/
     });
 </script>

@@ -8,6 +8,8 @@
     right: 0%;
     width: 100%;
     height: 100%; }
+  .tv .tv-data-label {
+    transition: padding-left .1s linear; }
   .tv .tv-weft {
     border-right: dashed rgba(153, 153, 153, 0.4) thin;
     background-color: rgba(153, 153, 153, 0.2); }

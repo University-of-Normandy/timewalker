@@ -13,6 +13,10 @@ $color: #999;
     height: 100%;
   }
 
+  .tv-data-label {
+    transition: padding-left .1s linear;
+  }
+
   .tv-weft {
     border-right: dashed rgba($color, .4) thin;
     background-color: rgba($color, .2);
