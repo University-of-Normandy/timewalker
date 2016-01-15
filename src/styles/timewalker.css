@@ -18,7 +18,7 @@
     .tv .tv-marker.tv-start {
       border-right: solid 2px #000; }
     .tv .tv-marker.tv-end {
-      border-left: solid 4px #555; }
+      border-left: solid 2px #000; }
   .tv .tv-title {
     font-weight: 100;
     line-height: 2em;
