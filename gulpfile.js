@@ -39,10 +39,11 @@ gulp.task('webserver', function() {
     gulp.src('src')
         .pipe(server({
             livereload: false,
+            port: 3333,
             directoryListing: true,
             open: true,
             defaultFile: 'src/demo/index.html'
         }));
 });
 
-gulp.task('dev', ['sass:watch', 'jshint:watch', 'webserver']);
+gulp.task('default', ['sass:watch', 'jshint:watch', 'webserver']);

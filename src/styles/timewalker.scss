@@ -171,3 +171,25 @@ $color: #999;
   font-weight: 100;
 }
 
+.tv-tooltip {
+  pointer-events: none;
+  background-color: rgba(white,.9);
+  border-radius: .25em;
+  padding: .5em;
+  font-size: .8em;
+  box-shadow: 0 0 2em rgba(0,0,0,.3), -2px 2px 4px rgba(0,0,0,.3);
+  position: relative;
+  max-width: 350px;
+  /* Square to border left...
+  &:before{
+    content: ' ';
+    background: white;
+    width: .5em;
+    height: .5em;
+    transform: rotate(45deg);
+    left: -.25em;
+    top: calc(50% - .25em);
+    position: absolute;
+  }
+  */
+}

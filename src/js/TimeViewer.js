@@ -2,7 +2,7 @@ define(['Backbone'], function (Backbone) {
 
     "use strict";
 
-    var TimeViewer, numericDate, unitDateData;
+    var TimeViewer, numericDate, unitDateData, showTooltip, tooltip, hideTooltip;
 
     // --------------------------------------------------------------- NAMESPACE
     TimeViewer = {
@@ -17,6 +17,59 @@ define(['Backbone'], function (Backbone) {
      */
     numericDate = function (date) {
         return date.getTime();
+    };
+
+    /**
+     * Display tooltip
+     * @param html
+     */
+    showTooltip = function(html, x, y) {
+        if( !tooltip ){
+            tooltip = $('<div class="tv-tooltip">THE TOOLTIP</div>')
+                .css({
+                    'position': 'fixed',
+                    'z-index': 1000
+                }).hide();
+            $('body').append(tooltip);
+
+        }
+
+        var positionLeft = x + 20,
+            positionTop = y,
+            width,
+            height,
+            $window = $(window),
+            windowWidth = $window.width(),
+            windowHeight = $window.height();
+
+        tooltip.html(html);
+
+        // Get tootlip's size
+        width = tooltip.width();
+        height = tooltip.height();
+
+        // Replace if overflow
+        if(positionLeft + width + 20 > windowWidth ){
+            positionLeft = windowWidth - width;
+        }
+        // Replace if overflow
+        if(positionTop + height > windowHeight ){
+            positionTop = windowHeight - height;
+        }
+
+
+        tooltip.css({
+            'top': positionTop,
+            'left': positionLeft
+        });
+
+        tooltip.fadeIn(300);
+    };
+
+    hideTooltip = function() {
+        if (tooltip) {
+            tooltip.hide();
+        }
     };
 
     /**
@@ -163,6 +216,22 @@ define(['Backbone'], function (Backbone) {
         className: "tv-serie-data",
         options: {},
 
+        events: {
+            'mouseenter': 'onMouseover',
+            'mouseleave': 'onMouseout'
+        },
+
+        onMouseover: function( evt ){
+            console.log("Mouse over", this.model.get('description'), evt);
+            if(this.model.get('description')){
+                showTooltip(this.model.get('description'), evt.clientX, evt.clientY);
+            }
+        },
+
+        onMouseout: function( evt ){
+            hideTooltip();
+        },
+
         /**
          * Constructor.
          *
@@ -245,7 +314,7 @@ define(['Backbone'], function (Backbone) {
 
             this.$el.html(TimeViewer.Templates.renderData(this.model.toJSON())).css({
                 width: itemWidth + '%',
-                'margin-top': (this.decalage) + 'em',
+                'margin-top': (this.decalage + 0.25) + 'em',
                 position: 'absolute',
                 left: itemleft + '%'
             });
@@ -297,27 +366,31 @@ define(['Backbone'], function (Backbone) {
             var decalage = {}, decalageCounter = 0;
 
             // Display "left maker", the effective begining
-            var startMarker = $('<div class="tv-marker tv-start">M</div>').css({
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: '-2000%',
-                width: ((numericDate(new Date(this.periodDisplay.startUse)) - this.periodDisplay.numericStart)*this.periodDisplay.ratio)+2000+'%',
-                'z-index': 20
-            });
-            datas.append(startMarker);
+            if( this.periodDisplay.forceBegining ) {
+                var startMarker = $('<div class="tv-marker tv-start">&nbsp;</div>').css({
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    left: '-2000%',
+                    width: ((numericDate(new Date(this.periodDisplay.startUse)) - this.periodDisplay.numericStart) * this.periodDisplay.ratio) + 2000 + '%',
+                    'z-index': 20
+                });
+                datas.append(startMarker);
+            }
 
             // Display "right maker", the effective ending
-            var endMarker = $('<div class="tv-marker tv-end">&nbsp;</div>').css({
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: ((numericDate(new Date(this.periodDisplay.endUse)) - this.periodDisplay.numericStart)*this.periodDisplay.ratio)+'%',
-                right: 0,
-                'z-index': 20
-            });
+            if( this.periodDisplay.forceEnding ) {
+                var endMarker = $('<div class="tv-marker tv-end">&nbsp;</div>').css({
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    left: ((numericDate(new Date(this.periodDisplay.endUse)) - this.periodDisplay.numericStart) * this.periodDisplay.ratio) + '%',
+                    right: 0,
+                    'z-index': 20
+                });
 
-            datas.append(endMarker);
+                datas.append(endMarker);
+            }
 
             // Other visual help
             for( var j=0; j<this.periodDisplay.segments; j++ ){

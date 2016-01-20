@@ -6,163 +6,61 @@
     <script src="../js/lib/requirejs/require.js"
             data-main="../js/dependencies.js"></script>
     <link rel="stylesheet" href="../styles/timewalker.css" />
+    <link rel="stylesheet" href="../styles/timewalker-extras.css" />
+    <style>
+        /* ////////////////////////////////////////////////////////////////////// */
+        /*                                                                        */
+        /* DEMO                                                                   */
+        /*                                                                        */
+        /* ////////////////////////////////////////////////////////////////////// */
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-<style>
-    /* ////////////////////////////////////////////////////////////////////// */
-    /*                                                                        */
-    /* DEMO                                                                   */
-    /*                                                                        */
-    /* ////////////////////////////////////////////////////////////////////// */
-    @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800);
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-    html, body {
-        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-        font-size: 16px;
-    }
-
-    .data-blue {
-        background: rgba(25,25,200, .75);
-        border: solid thin rgba(25,25,200, .9);
-    }
-    .data-pink {
-        background: rgba(204,0,102, .75);
-        border: solid thin rgba(204,0,102, .9);
-    }
-</style>
+<div id="project-members"></div>
 <script>
-    var example, TimeViewer;
+    require(['TimeViewer'], function (TimeViewer) {
+        var series = [];
+        var serie4321 = new TimeViewer.Model.Serie({label: "David CORROLER<small> (IUT Caen)<\/small>"});
+        serie4321.add([{"label":"Responsable","start":null,"end":null, "description": "Sur l'intégralité du projet"}]);
+        series.push(serie4321);
 
-    require(['TimeViewer'], function (tv) {
-        TimeViewer = tv;
-        var serie = new TimeViewer.Model.Serie({
-            label: "Stéphane Bouvry"
-        });
-        serie.add([
-            {
-                label: "Développeur",
-                start: '2009-01-01',
-                end: '2009-12-31'
-            },
-            {
-                label: "Analyste",
-                start: '2010-01-01',
-                end: '2010-12-31'
-            },
-            {
-                label: "Développeur",
-                start: '2011-01-01',
-                end: '2011-12-31'
-            },
-             {
-             label: "Développeur",
-             start: '2012-01-01',
-             end: '2012-12-31'
-             },
-             {
-             label: "Conseiller",
-             start: '2012-01-01',
-             end: '2013-12-31'
-             },
-             {
-             label: "Développeur",
-             start: '2014-01-01',
-             end: '2014-12-31'
-             },
-             {
-             label: "Consultant",
-             start: '2015-01-01',
-             end: '2015-12-31'
-             }
-        ]);
-
-        var serie2 = new TimeViewer.Model.Serie({
-            label: 'Arnaud Daret'
-        });
-        serie2.add([
-            {
-                label: "Consultant",
-                start: '2010-01-01',
-                end: '2011-06-15'
-            },
-            {
-                label: "Consultant",
-                start: '2011-06-20',
-                end: '2012-12-31'
-            }
-        ]);
-
-        var serie3 = new TimeViewer.Model.Serie({
-            label: 'Conseiller technique'
-        });
-        serie3.add([
-            {
-                label: "Conseiller technique",
-                start: '2013-01-01',
-                end: ''
-            }
-        ]);
-
-        var serie4 = new TimeViewer.Model.Serie({
-            label: 'Conseiller administratif et RH'
-        });
-        serie4.add([
-            {
-                label: "Conseiller administratif et RH",
-                start: '2009-01-01',
-                end: '2009-12-31'
-            },
-            {
-                label: "Conseiller administratif et RH",
-                start: '2010-01-01',
-                end: '2010-05-28'
-            },
-            {
-                label: "Conseiller administratif et RH",
-                start: '2011-01-01',
-                end: '2011-05-28'
-            },{
-                label: "Conseiller administratif et RH",
-                start: '2012-01-01',
-                end: '2012-05-28'
-            },{
-                label: "Conseiller administratif et RH",
-                start: '2013-01-01',
-                end: '2013-05-28'
-            },{
-                label: "Conseiller administratif et RH",
-                start: '2014-01-01',
-                end: '2014-05-28'
-            },{
-                label: "Conseiller administratif et RH",
-                start: '2015-01-01',
-                end: '2015-05-28'
-            }
-
-        ]);
-
-        var all = new TimeViewer.Model.TimeViewer([serie, serie2, serie3, serie4]);
-        console.log(all.toJSON());
-        console.log('la totale débute ', all.getMinDate());
-        console.log('la totale finie ', all.getMaxDate());
-
-
-        example = new TimeViewer.View.Main({model: all}, {
+        var serie007 = new TimeViewer.Model.Serie({label: "Stéphane BOUVRY<small> (CERTIC)<\/small>"});
+        serie007.add([{"label":"Développeur","start":null,"end":null}]);
+        serie007.add([{"label":"Trublion","start":'2015-01-01',"end":'2015-06-30', description: "Du premier Janvier 2015 au 30 Juin sur les activités : <br><ul><li>Activité 1</li><li>Activité 2</li></ul>"}]);
+        serie007.add([{"label":"Trublion","start":'2013-01-01',"end":'2013-06-30'}]);
+        serie007.add([{"label":"Trublion","start":'2016-01-01',"end":'2016-06-30', description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur culpa dignissimos dolore doloribus earum eos exercitationem, explicabo ipsum magnam maiores minima nam, natus quas ratione sint sunt tempore temporibus velit! : <br><ul><li>Activité 1</li><li>Activité 2</li></ul>"}]);
+        series.push(serie007);
+        var serie3903 = new TimeViewer.Model.Serie({label: "Emilie DUVAL<small> (SAIC)<\/small>"});
+        serie3903.add([{"label":"Charg\u00e9 de valorisation","start":null,"end":null}]);
+        series.push(serie3903);
+        var serie4660 = new TimeViewer.Model.Serie({label: "Ridha MOSRATI<small> (IUT Caen)<\/small>"});
+        serie4660.add([{"label":"Co-responsable","start":null,"end":null}]);
+        series.push(serie4660);
+        var members = new TimeViewer.Model.TimeViewer(series);
+        var membersView = new TimeViewer.View.Main({model: members}, {
             title: "Membres de l'équipe",
             labelClass : {
-                'Développeur': 'data-blue',
-                'Conseiller': 'data-pink'
+                'Trublion': 'data-pink',
+                'Responsable': 'data-green',
+                'Chargé de valorisation': 'data-blue',
+                'Co-responsable': 'data-red',
             }
         });
+        $('#project-members').append(membersView.render().$el);
 
-        $('body').append(example.render().$el);
-        /*****/
-    });
+
+    })
 </script>
 </body>
 </html>
