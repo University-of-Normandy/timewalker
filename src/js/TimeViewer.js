@@ -314,7 +314,7 @@ define(['Backbone'], function (Backbone) {
 
             this.$el.html(TimeViewer.Templates.renderData(this.model.toJSON())).css({
                 width: itemWidth + '%',
-                'margin-top': (this.decalage + 0.25) + 'em',
+                'margin-top': ((this.decalage*2) + 0.25) + 'em',
                 position: 'absolute',
                 left: itemleft + '%'
             });
@@ -419,7 +419,7 @@ define(['Backbone'], function (Backbone) {
                 });
                 datas.append(view.render().$el);
             }.bind(this));
-            this.$el.css('min-height', (2 + (decalageCounter * 0.75)) + 'em');
+            this.$el.css('min-height', (1.25 + (decalageCounter*1.65)) + 'em');
             return this;
         }
     });
